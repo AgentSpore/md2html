@@ -1,13 +1,14 @@
 """MD2HTML — Markdown to HTML converter.
 
-Thin FastAPI application entrypoint. Domain logic and routers (markdown
-conversion endpoint, history, etc.) are added in later scaffold groups
-(G2..G5).
+FastAPI application entrypoint. Domain logic lives in services/ (G4).
+Routers are mounted under /api.
 """
 from __future__ import annotations
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+
+from .api.document import router as document_router
 
 __version__ = "0.1.0"
 
@@ -24,6 +25,8 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+app.include_router(document_router, prefix="/api/v1/documents")
 
 
 @app.get("/health", tags=["meta"])
